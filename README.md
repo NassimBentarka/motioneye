@@ -1,3 +1,6 @@
+# Why use this fork?
+This fork fixes and introduces the VAAPI hardware encoding to allow you to use GPU hardware encoding for HEVC and H264. It adds a feature to choose your GPU from the WEB Dashboard when VAAPI is selected.
+
 # What is motionEye?
 
 **motionEye** is an online interface for the software [_motion_](https://motion-project.github.io/), a video surveillance program with motion detection.
