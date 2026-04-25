@@ -841,6 +841,9 @@
                                     {% if has_h264_qsv_support %}
                                     <option value="mp4:h264_qsv">H.264/QSV (.mp4)</option>
                                     {% endif %}
+                                    {% if has_h264_vaapi_support %}
+                                    <option value="mp4:h264_vaapi">H.264/VAAPI (.mp4)</option>
+                                    {% endif %}
                                     {% if has_h264_omx_support %}
                                     <option value="mp4:h264_omx">H.264/OMX (.mp4)</option>
                                     {% endif %}
@@ -857,6 +860,9 @@
                                     {% if has_hevc_qsv_support %}
                                     <option value="mp4:hevc_qsv">HEVC/QSV (.mp4)</option>
                                     {% endif %}
+                                    {% if has_hevc_vaapi_support %}
+                                    <option value="mp4:hevc_vaapi">HEVC/VAAPI (.mp4)</option>
+                                    {% endif %}
                                     <option value="mkv">Matroska Video (.mkv)</option>
                                     {% if has_h264_omx_support %}
                                     <option value="mkv:h264_omx">Matroska Video/OMX (.mkv)</option>
@@ -868,6 +874,19 @@
                             </td>
                             <td><span class="help-mark" title="{{ _("Agordas la filmdosieron; ne ĉiuj formatoj garantias funkcii en ĉiuj sistemoj; se vi dubas, testu ĉiun formaton kaj elektu tiun, kiu plej bone funkcias per via filmetilo.") }}">?</span></td>
                         </tr>
+                        {% if vaapi_devices %}
+                        <tr class="settings-item" depends="!moviePassthrough" id="vaapiDeviceRow">
+                            <td class="settings-item-label"><span class="settings-item-label">{{ _("GPU Renderer") }}</span></td>
+                            <td class="settings-item-value">
+                                <select class="styled movies camera-config" id="vaapiDeviceSelect">
+                                    {% for dev_path, dev_label in vaapi_devices %}
+                                    <option value="{{ dev_path }}">{{ dev_label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td><span class="help-mark" title="{{ _("Select the GPU render device to use for VAAPI hardware-accelerated video encoding. Only applies when a VAAPI movie format is selected.") }}">?</span></td>
+                        </tr>
+                        {% endif %}
                         <tr class="settings-item" min="0" max="100" snap="0" ticksnum="5" decimals="0" unit="%">
                             <td class="settings-item-label"><span class="settings-item-label">{{ _("Filma Kvalito") }}</span></td>
                             <td class="settings-item-value"><input type="text" class="range styled movies camera-config" id="movieQualitySlider"></td>

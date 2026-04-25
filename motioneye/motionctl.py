@@ -507,6 +507,66 @@ def has_hevc_qsv_support():
     return 'hevc_qsv' in codecs.get('hevc', {}).get('encoders', set())
 
 
+
+
+def has_h264_vaapi_support():
+    binary, version, codecs = mediafiles.find_ffmpeg()
+    if not binary:
+        return False
+
+    return 'h264_vaapi' in codecs.get('h264', {}).get('encoders', set())
+
+
+def has_hevc_vaapi_support():
+    binary, version, codecs = mediafiles.find_ffmpeg()
+    if not binary:
+        return False
+
+    return 'hevc_vaapi' in codecs.get('hevc', {}).get('encoders', set())
+
+
+def list_vaapi_devices():
+    """List available VAAPI render devices with human-readable labels."""
+
+    devices = []
+    try:
+        for entry in sorted(os.listdir('/dev/dri/')):
+            if not entry.startswith('renderD'):
+                continue
+
+            dev_path = '/dev/dri/' + entry
+            label = entry  # fallback label
+
+            # try to get a human-readable name from sysfs
+            sysfs_device = '/sys/class/drm/' + entry + '/device'
+            try:
+                with open(os.path.join(sysfs_device, 'vendor')) as f:
+                    vendor = f.read().strip().replace('0x', '')
+                with open(os.path.join(sysfs_device, 'device')) as f:
+                    device_id = f.read().strip().replace('0x', '')
+
+                output = subprocess.check_output(
+                    ['lspci', '-d', vendor + ':' + device_id],
+                    stderr=subprocess.DEVNULL,
+                    timeout=5
+                ).decode().strip()
+
+                if output:
+                    # extract the description after the colon
+                    parts = output.split(': ', 1)
+                    if len(parts) > 1:
+                        label = parts[1]
+
+            except Exception:
+                pass
+
+            devices.append((dev_path, label + ' (' + entry + ')'))
+
+    except Exception:
+        pass
+
+    return devices
+
 def resolution_is_valid(width, height):
     # width & height must be be modulo 8
 

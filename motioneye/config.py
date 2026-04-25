@@ -80,6 +80,8 @@ _USED_MOTION_OPTIONS = {
     'mask_file',
     'mask_privacy',
     'movie_codec',
+    'movie_extpipe',
+    'movie_extpipe_use',
     'movie_filename',
     'movie_max_time',
     'movie_output_motion',
@@ -1164,6 +1166,26 @@ def motion_camera_ui_to_dict(ui, prev_config=None):
 
     data['movie_quality'] = max(1, q)
 
+    # VAAPI hardware encoding via movie_extpipe
+    movie_format = ui['movie_format']
+    if movie_format in ('mp4:hevc_vaapi', 'mp4:h264_vaapi'):
+        encoder = 'hevc_vaapi' if 'hevc' in movie_format else 'h264_vaapi'
+        vaapi_device = ui.get('vaapi_device') or '/dev/dri/renderD128'
+        qp = max(1, int(51 * (100 - q) / 100))  # invert: 100%=best(QP1), 0%=worst(QP51)
+        data['@vaapi_device'] = vaapi_device
+        data['movie_extpipe_use'] = True
+        data['movie_extpipe'] = (
+            "ffmpeg -y -f rawvideo -pix_fmt yuv420p "
+            "-video_size %wx%h -framerate %{fps} -i pipe:0 "
+            "-vaapi_device " + vaapi_device + " "
+            "-vf 'format=nv12,hwupload' "
+            "-c:v " + encoder + " -qp " + str(qp) + " "
+            "-f mp4 %f.mp4"
+        )
+    else:
+        data['movie_extpipe_use'] = False
+        data['movie_extpipe'] = ''
+
     # motion detection
 
     if ui['despeckle_filter']:
@@ -1700,6 +1722,7 @@ def motion_camera_dict_to_ui(data):
 
     ui['movie_format'] = data['movie_codec']
     ui['movie_quality'] = data['movie_quality']
+    ui['vaapi_device'] = data.get('@vaapi_device', '')
 
     # masks
     if data['mask_file']:

@@ -1560,6 +1560,15 @@ function updateConfigUI() {
         $('#moviesEnabledSwitch').parent().next('table.settings').find('tr.settings-item').each(markHideLogic);
     }
 
+    /* vaapi device visibility - only show when a VAAPI movie format is selected */
+    var vaapiDeviceRow = $('#vaapiDeviceRow');
+    if (vaapiDeviceRow.length) {
+        var movieFormat = $('#movieFormatSelect').val() || '';
+        if (movieFormat.indexOf('vaapi') < 0) {
+            vaapiDeviceRow.each(markHideLogic);
+        }
+    }
+
     /* motion detection switch */
     if (!$('#motionDetectionEnabledSwitch').get(0).checked) {
         $('#motionDetectionEnabledSwitch').parent().next('table.settings').find('tr.settings-item').each(markHideLogic);
@@ -2022,6 +2031,7 @@ function cameraUi2Dict() {
         'movie_quality': $('#movieQualitySlider').val(),
         'movie_format': $('#movieFormatSelect').val(),
         'movie_passthrough': $('#moviePassthroughSwitch')[0].checked,
+        'vaapi_device': $('#vaapiDeviceSelect').val() || '',
         'recording_mode': $('#recordingModeSelect').val(),
         'max_movie_length': $('#maxMovieLengthEntry').val(),
         'preserve_movies': $('#preserveMoviesSelect').val() >= 0 ? $('#preserveMoviesSelect').val() : $('#moviesLifetimeEntry').val(),
@@ -2399,6 +2409,10 @@ function dict2CameraUi(dict) {
     $('#recordingModeSelect').val(dict['recording_mode']); markHideIfNull('recording_mode', 'recordingModeSelect');
     $('#maxMovieLengthEntry').val(dict['max_movie_length']); markHideIfNull('max_movie_length', 'maxMovieLengthEntry');
     $('#moviePassthroughSwitch')[0].checked = dict['movie_passthrough']; markHideIfNull('movie_passthrough', 'moviePassthroughSwitch');
+    if ($('#vaapiDeviceSelect').length && dict['vaapi_device']) {
+        $('#vaapiDeviceSelect').val(dict['vaapi_device']);
+    }
+    markHideIfNull('vaapi_device', 'vaapiDeviceSelect');
     $('#preserveMoviesSelect').val(dict['preserve_movies']);
     if ($('#preserveMoviesSelect').val() == null) {
         $('#preserveMoviesSelect').val('-1');

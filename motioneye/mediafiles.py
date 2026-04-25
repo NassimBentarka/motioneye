@@ -54,6 +54,8 @@ FFMPEG_CODEC_MAPPING = {
     'mp4:h264_v4l2m2m': 'h264_v4l2m2m',
     'mkv:h264_v4l2m2m': 'h264_v4l2m2m',
     'hevc': 'h265',
+    'mp4:h264_vaapi': 'h264_vaapi',
+    'mp4:hevc_vaapi': 'hevc_vaapi',
 }
 
 FFMPEG_FORMAT_MAPPING = {
@@ -69,6 +71,8 @@ FFMPEG_FORMAT_MAPPING = {
     'mp4:h264_v4l2m2m': 'mp4',
     'mkv:h264_v4l2m2m': 'matroska',
     'hevc': 'mp4',
+    'mp4:h264_vaapi': 'mp4',
+    'mp4:hevc_vaapi': 'mp4',
 }
 
 FFMPEG_EXT_MAPPING = {
@@ -84,6 +88,8 @@ FFMPEG_EXT_MAPPING = {
     'mp4:h264_v4l2m2m': 'mp4',
     'mkv:h264_v4l2m2m': 'mkv',
     'hevc': 'mp4',
+    'mp4:h264_vaapi': 'mp4',
+    'mp4:hevc_vaapi': 'mp4',
 }
 
 MOVIE_EXT_TYPE_MAPPING = {
