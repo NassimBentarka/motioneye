@@ -525,6 +525,14 @@ def has_hevc_vaapi_support():
     return 'hevc_vaapi' in codecs.get('hevc', {}).get('encoders', set())
 
 
+def has_av1_vaapi_support():
+    binary, version, codecs = mediafiles.find_ffmpeg()
+    if not binary:
+        return False
+
+    return 'av1_vaapi' in codecs.get('av1', {}).get('encoders', set())
+
+
 def list_vaapi_devices():
     """List available VAAPI render devices with human-readable labels."""
 

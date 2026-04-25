@@ -863,6 +863,9 @@
                                     {% if has_hevc_vaapi_support %}
                                     <option value="mp4:hevc_vaapi">HEVC/VAAPI (.mp4)</option>
                                     {% endif %}
+                                    {% if has_av1_vaapi_support %}
+                                    <option value="mp4:av1_vaapi">AV1/VAAPI (.mp4)</option>
+                                    {% endif %}
                                     <option value="mkv">Matroska Video (.mkv)</option>
                                     {% if has_h264_omx_support %}
                                     <option value="mkv:h264_omx">Matroska Video/OMX (.mkv)</option>

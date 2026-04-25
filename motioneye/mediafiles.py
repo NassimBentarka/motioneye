@@ -56,6 +56,7 @@ FFMPEG_CODEC_MAPPING = {
     'hevc': 'h265',
     'mp4:h264_vaapi': 'h264_vaapi',
     'mp4:hevc_vaapi': 'hevc_vaapi',
+    'mp4:av1_vaapi': 'av1_vaapi',
 }
 
 FFMPEG_FORMAT_MAPPING = {
@@ -73,6 +74,7 @@ FFMPEG_FORMAT_MAPPING = {
     'hevc': 'mp4',
     'mp4:h264_vaapi': 'mp4',
     'mp4:hevc_vaapi': 'mp4',
+    'mp4:av1_vaapi': 'mp4',
 }
 
 FFMPEG_EXT_MAPPING = {
@@ -90,6 +92,7 @@ FFMPEG_EXT_MAPPING = {
     'hevc': 'mp4',
     'mp4:h264_vaapi': 'mp4',
     'mp4:hevc_vaapi': 'mp4',
+    'mp4:av1_vaapi': 'mp4',
 }
 
 MOVIE_EXT_TYPE_MAPPING = {
@@ -254,11 +257,11 @@ def find_ffmpeg() -> tuple:
         decoders = set()
         encoders = set()
 
-        m = re.search(r'decoders: ([\w\s_]+)+', line)
+        m = re.search(r'decoders: ([\w\s_\-]+)+', line)
         if m:
             decoders = set(m.group(1).split())
 
-        m = re.search(r'encoders: ([\w\s_]+)+', line)
+        m = re.search(r'encoders: ([\w\s_\-]+)+', line)
         if m:
             encoders = set(m.group(1).split())
 

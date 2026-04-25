@@ -1168,10 +1168,15 @@ def motion_camera_ui_to_dict(ui, prev_config=None):
 
     # VAAPI hardware encoding via movie_extpipe
     movie_format = ui['movie_format']
-    if movie_format in ('mp4:hevc_vaapi', 'mp4:h264_vaapi'):
-        encoder = 'hevc_vaapi' if 'hevc' in movie_format else 'h264_vaapi'
+    if movie_format in ('mp4:hevc_vaapi', 'mp4:h264_vaapi', 'mp4:av1_vaapi'):
+        encoder = 'av1_vaapi' if 'av1' in movie_format else ('hevc_vaapi' if 'hevc' in movie_format else 'h264_vaapi')
         vaapi_device = ui.get('vaapi_device') or '/dev/dri/renderD128'
-        qp = max(1, int(51 * (100 - q) / 100))  # invert: 100%=best(QP1), 0%=worst(QP51)
+        if encoder == 'av1_vaapi':
+            # AV1 VAAPI QP range: 0-255. Map 100%->0(best), 0%->255(worst)
+            qp = int(255 * (100 - q) / 100)  # full range
+        else:
+            # H.264/HEVC QP range: 0-51. Map 100%->1(best), 0%->51(worst)
+            qp = int(51 * (100 - q) / 100)  # full range
         data['@vaapi_device'] = vaapi_device
         data['movie_extpipe_use'] = True
         data['movie_extpipe'] = (

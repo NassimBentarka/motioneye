@@ -57,6 +57,7 @@ class MainHandler(BaseHandler):
             has_hevc_qsv_support=motionctl.has_hevc_qsv_support(),
             has_h264_vaapi_support=motionctl.has_h264_vaapi_support(),
             has_hevc_vaapi_support=motionctl.has_hevc_vaapi_support(),
+            has_av1_vaapi_support=motionctl.has_av1_vaapi_support(),
             vaapi_devices=motionctl.list_vaapi_devices(),
             has_motion=bool(motionctl.find_motion()[0]),
             mask_width=utils.MASK_WIDTH,
