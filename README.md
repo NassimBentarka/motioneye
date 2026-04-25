@@ -1,5 +1,6 @@
 # Why use this fork?
 This fork fixes and introduces the VAAPI hardware encoding to allow you to use GPU hardware encoding for HEVC and H264. It adds a feature to choose your GPU from the WEB Dashboard when VAAPI is selected.
+I also added feature to encode in AV1 using VAAPI hardware acceleration which should save you 30% to 40% more compared to HEVC.
 
 # What is motionEye?
 
